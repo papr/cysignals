@@ -71,6 +71,7 @@ cdef int add_custom_signals(int (*custom_signal_is_blocked)(),
 
     - ``custom_set_pending_signal`` -- set a pending signal in case of blocking
     """
+    global n_custom_handlers
     if n_custom_handlers == MAX_N_CUSTOM_HANDLERS:
         raise IndexError("maximal number of custom handlers exceeded")
 
