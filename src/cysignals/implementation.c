@@ -255,7 +255,7 @@ static void cysigs_interrupt_handler(int sig)
     if (cysigs.interrupt_received != SIGHUP && cysigs.interrupt_received != SIGTERM)
     {
         cysigs.interrupt_received = sig;
-        set_custom_pending_signal(sig);
+        custom_set_pending_signal(sig);
     }
 }
 
