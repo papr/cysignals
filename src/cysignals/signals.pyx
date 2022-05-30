@@ -78,6 +78,8 @@ cdef int add_custom_signals(int (*custom_signal_is_blocked)(),
     custom_signal_unblock_pts[n_custom_handlers] = custom_signal_unblock
     custom_set_pending_signal_pts[n_custom_handlers] = custom_set_pending_signal
 
+    n_custom_handlers += 1
+
 
 class AlarmInterrupt(KeyboardInterrupt):
     """
