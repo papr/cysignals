@@ -51,27 +51,32 @@ cdef extern from "implementation.c":
     void PyErr_SetString(object type, char *message)
     void PyErr_Format(object exception, char *format, ...)
 
-    # PARI version string; NULL if compiled without PARI support
-    const char* paricfg_version
+    int (**custom_signal_is_blocked_pts)()
+    void (**custom_signal_unblock_pts)()
+    void (**custom_set_pending_signal_pts)(int)
+    int n_custom_handlers
+    int MAX_N_CUSTOM_HANDLERS
 
-
-def _pari_version():
+cdef int add_custom_signals(int (*custom_signal_is_blocked)(),
+                            void (*custom_signal_unblock)(),
+                            void (*custom_set_pending_signal)(int)) except -1:
     """
-    Return the full version string of PARI which was used to compile
-    cysignals, or ``None`` if cysignals was compiled without PARI
-    support.
+    Add an external block/unblock/pending to cysignals.
 
-    TESTS::
+    INPUT:
 
-        sage: from cysignals.signals import _pari_version
-        sage: v = _pari_version()
-        sage: v is None or type(v) is str
-        True
+    - ``custom_signal_is_blocked`` -- returns whether signals are currently blocked.
+
+    - ``custom_signal_unblock``  -- unblocks signals
+
+    - ``custom_set_pending_signal`` -- set a pending signal in case of blocking
     """
-    if paricfg_version is NULL:
-        return None
-    cdef bytes v = paricfg_version
-    return v.decode('ascii')
+    if n_custom_handlers == MAX_N_CUSTOM_HANDLERS:
+        raise IndexError("maximal number of custom handlers exceeded")
+
+    custom_signal_is_blocked_pts[n_custom_handlers] = custom_signal_is_blocked
+    custom_signal_unblock_pts[n_custom_handlers] = custom_signal_unblock
+    custom_set_pending_signal_pts[n_custom_handlers] = custom_set_pending_signal
 
 
 class AlarmInterrupt(KeyboardInterrupt):
