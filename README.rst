@@ -31,7 +31,6 @@ Requirements
 - Python >= 3.6
 - Cython >= 0.28
 - Sphinx >= 1.6 (for building the documentation)
-- PARI/GP (optional; for interfacing with the PARI/GP signal handler)
 
 Links
 -----
@@ -47,6 +46,7 @@ Changelog
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Replace `fprintf` by calls to `write`, which is async-signal-safe according to POSIX. [#162]
+* Introduce a general hook to interface with custom signal handling and remove optional compile-time dependency on PARI/GP. [#166]
 
 
 1.11.2 (2021-12-15)
