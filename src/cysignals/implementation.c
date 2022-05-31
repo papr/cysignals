@@ -64,6 +64,7 @@ static void (*custom_set_pending_signal_pts[MAX_N_CUSTOM_HANDLERS])(int);
 static int n_custom_handlers = 0;
 
 int custom_signal_is_blocked(){
+    // Check if a custom block is set.
     for(int i = 0; i < n_custom_handlers; i++){
         if (custom_signal_is_blocked_pts[i]())
             return 1;
@@ -72,12 +73,14 @@ int custom_signal_is_blocked(){
 }
 
 void custom_signal_unblock(){
+    // Unset all custom blocks.
     for(int i = 0; i < n_custom_handlers; i++)
         custom_signal_unblock_pts[i]();
 }
 
 
 void custom_set_pending_signal(int sig){
+    // Set a pending signal to custom handlers.
     for(int i = 0; i < n_custom_handlers; i++)
         custom_set_pending_signal_pts[i](sig);
 }
